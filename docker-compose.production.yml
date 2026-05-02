@@ -1,0 +1,42 @@
+services:
+  paperclip:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3100:3100"
+    environment:
+      HOST: "0.0.0.0"
+      PAPERCLIP_HOME: /paperclip
+      PAPERCLIP_DEPLOYMENT_MODE: authenticated
+      PAPERCLIP_DEPLOYMENT_EXPOSURE: public
+      PAPERCLIP_PUBLIC_URL: https://team.ailoxa.com
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      DATABASE_URL: postgres://paperclip:${POSTGRES_PASSWORD}@db:5432/paperclip
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - paperclip_data:/paperclip
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: paperclip
+      POSTGRES_USER: paperclip
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paperclip"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  paperclip_data:
+  postgres_data:
