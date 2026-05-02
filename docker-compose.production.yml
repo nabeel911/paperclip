@@ -11,7 +11,7 @@ services:
       PAPERCLIP_HOME: /paperclip
       PAPERCLIP_DEPLOYMENT_MODE: authenticated
       PAPERCLIP_DEPLOYMENT_EXPOSURE: public
-      PAPERCLIP_PUBLIC_URL: https://team.ailoxa.com
+      PAPERCLIP_PUBLIC_URL: https://teams.ailoxa.com
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
       DATABASE_URL: postgres://paperclip:${POSTGRES_PASSWORD}@db:5432/paperclip
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
